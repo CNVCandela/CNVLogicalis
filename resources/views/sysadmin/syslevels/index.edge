@@ -1,0 +1,193 @@
+@pushOnceTo('breadcrumb')
+<li class="breadcrumb-item text-sm text-dark active"><a class="font-weight-bolder text-dark"
+    href="{{ route('sysadmin.levels.index') }}">Module Level</a></li>
+@end
+
+@layout({ title: 'Module Level', menu02: 'active bg-gradient-primary' })
+
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div class="card my-4">
+      <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+        <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+          <h6 class="text-white text-capitalize ps-3">List Level</h6>
+        </div>
+        <div class="row mt-2">
+
+          @flashMessage('validationError')
+          <div class="notification {{ $message.type }}">
+            <li> <b>Error:</b> {{ $message.message }}</li>
+          </div>
+          @end
+
+          @flashMessage('notification')
+          <div class="notification {{ $message.type }}">
+            <span class="text-sm">Revisar el Error.</span>
+            <button type="button" class="btn-close text-lg py-3 opacity-10" data-bs-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            @each(message in $message.message)
+            <li>{{ message }}</li>
+            @end
+          </div>
+          @end
+          <div class="col-6">
+            <div wire:model.live="search" class="input-group input-group-outline">
+              <label class="form-label"></label>
+              <input type="text" class="form-control" placeholder="Search">
+            </div>
+          </div>
+          <div class="col-2"></div>
+          <div class="col-4">
+            <button type="button" class="btn btn-info w-lg-100" wire:click="resetInputFields()" data-bs-toggle="modal" data-bs-target="#createModal">
+              <i class="fa fa-plus-square mr-2"></i> Create Area
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-12">
+            <div class="table-responsive p-0">
+              <table class="table table-sm">
+                <thead>
+                  <tr>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Options</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @each(row in records)
+                  <tr>
+                    <td class="">{{ row.id }}</td>
+                    <td class="">{{ row.name }}</td>
+                    <td class="text-center">
+                      <div class="btn-group">
+                        <button type="button" onclick="SelectRecord({{ row.id }})" data-bs-toggle="modal"
+                          data-bs-target="#editModal" class="btn btn-warning btn-sm mt-2">Edit</button>
+                      </div>
+                    </td>
+                  </tr>
+                  @endeach
+                </tbody>
+              </table>
+            </div>
+            <div class="row">
+              <div class="pagination mt-3">
+                @if(records.lastPage > 1)
+                <ul class="pagination justify-content-center pagination-primary">
+                  @each(anchor in records.getUrlsForRange(1, records.lastPage))
+                  <li class="page-item {{ anchor.isActive ? 'active' : '' }}">
+                    <a class="page-link" href="{{ baseUrl }}?page={{ anchor.page }}">{{ anchor.page }}</a>
+                  </li>
+                  @endeach
+                </ul>
+                @endif
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" data-bs-keyboard="false" data-bs-backdrop="static" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="createModalLabel">Register Area</h5>
+        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form role="form" action="{{ route('sysadmin.areas.store') }}" method="POST">
+          {{ csrfField() }}
+          <div class="input-group input-group-outline my-3">
+            <label class="form-label">Area Name</label>
+            <input type="text" name="form_name" class="form-control">
+            @inputError('form_name')
+            {{ $messages.join(', ') }}
+            @end
+
+          </div>
+          <div class="text-center">
+            <button type="submit" class="btn bg-gradient-primary"><i class="fa fa-check-circle"></i> Save</button>
+            <button type="button" class="btn btn-warning close-btn" data-bs-dismiss="modal"><i
+                class="fa fa-times-circle"></i> Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" data-bs-keyboard="false" data-bs-backdrop="static" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editModalLabel">Edit Area</h5>
+        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form role="form" id="areaForm" action="/sysadmin/areas" method="POST" onsubmit="setActionUrl(event)">
+          {{ csrfField() }}
+          <input type="hidden" name="_method" value="PUT">
+          <input type="hidden" name="area_id" id="area_id">
+          <div class="input-group input-group-outline my-3">
+            <label class="form-label"></label>
+            <input type="text" name="form_name" id="form_name" class="form-control">
+          </div>
+          <div class="text-center">
+            <button type="submit" class="btn bg-gradient-primary"><i class="fa fa-check-circle"></i> Save</button>
+            <button type="button" class="btn btn-warning close-btn" data-bs-dismiss="modal"><i
+                class="fa fa-times-circle"></i> Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+@end
+
+
+@pushOnceTo('js')
+<script type="text/javascript">
+  function setActionUrl(event) {
+    event.preventDefault(); // Prevenir el envío del formulario
+
+    const areaId = document.getElementById('area_id').value; // Obtener el ID del usuario
+    const form = document.getElementById('areaForm');
+
+    // Establecer la acción del formulario a la URL de actualización
+
+    form.action = `/sysadmin/areas/${areaId}`; // Cambiar la URL según tu configuración de rutas
+
+    // Enviar el formulario
+    form.submit(); // Enviar el formulario después de establecer la acción
+  }
+
+  function SelectRecord(CodID) {
+    var area_ID = CodID;
+    const url = '/sysadmin/areas/' + area_ID;
+    console.log(url);
+    fetch(url, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest' // Indica que es una solicitud AJAX
+      }
+    })
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('area_id').value = area_ID;
+        document.getElementById('form_name').value = data.name;
+      })
+      .catch(error => {
+        console.error("Error fetching user data:", error);
+      });
+
+  }
+</script>
+@end

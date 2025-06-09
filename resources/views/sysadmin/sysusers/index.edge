@@ -1,0 +1,104 @@
+@layout({ title: 'Module Users', menu01: 'active bg-gradient-primary' })
+
+<div class="row justify-content-center">
+  <div class="col-12">
+    <div class="card my-4">
+      <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+        <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+          <h6 class="text-white text-capitalize ps-3">List Users</h6>
+        </div>
+        <div class="row mt-2">
+
+          @flashMessage('validationError')
+          <div class="notification {{ $message.type }}">
+            <li> <b>Error:</b> {{ $message.message }}</li>
+          </div>
+          @end
+
+          @flashMessage('notification')
+          <div class="notification {{ $message.type }}">
+            <span class="text-sm">Revisar el Error.</span>
+            <button type="button" class="btn-close text-lg py-3 opacity-10" data-bs-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            @each(message in $message.message)
+            <li>{{ message }}</li>
+            @end
+          </div>
+          @end
+
+          <div class="col-6">
+            <div wire:model.live="search" class="input-group input-group-outline">
+              <label class="form-label"></label>
+              <input type="text" class="form-control" placeholder="Search">
+            </div>
+          </div>
+          <div class="col-2"></div>
+          <div class="col-4">
+            <button type="button" class="btn btn-info w-lg-100" wire:click="resetInputFields()" data-bs-toggle="modal"
+              data-bs-target="#createModal"> <i class="fa fa-plus-square mr-2"></i> Create User
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-12">
+            <div class="table-responsive p-0">
+              <table class="table align-items-center mb-0">
+                <thead>
+                  <tr>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                      UserID</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                      Name</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                      Email</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                      Area</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                      Role</th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                      Options
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @each(row in records)
+                  <tr>
+                    <td class="">{{ row.id }}</td>
+                    <td class="">{{ row.fullName }}</td>
+                    <td class="">{{ row.email }}</td>
+                    <td class="">{{ row.area.name }}</td>
+                    <td class="">{{ row.role.name }}</td>
+                    <td class="text-center">
+                      <div class="btn-group">
+                        <button type="button" onclick="SelectRecord({{ row.id }})" data-bs-toggle="modal"
+                          data-bs-target="#editModal" class="btn btn-warning btn-sm mt-2">Edit</button>
+                      </div>
+                    </td>
+                  </tr>
+                  @endeach
+                </tbody>
+              </table>
+            </div>
+            <div class="row">
+              <nav class="mt-3" aria-label="Page navigation example">
+                <ul class="pagination justify-content-center pagination-primary">
+
+                </ul>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+@end
+
+@pushOnceTo('breadcrumb')
+<li class="breadcrumb-item text-sm text-dark active"><a class="font-weight-bolder text-dark"
+    href="{{ route('sysadmin.users.index') }}">Module Users</a></li>
+@end

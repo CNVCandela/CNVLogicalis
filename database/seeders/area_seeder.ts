@@ -3,19 +3,19 @@ import { BaseSeeder } from '@adonisjs/lucid/seeders'
 
 export default class extends BaseSeeder {
   async run() {
-    await Area.create(
+    await Area.createMany([
       {
         state: 1,
         type: 1,
         situation: 1,
-        fullName: 'CXC-Voice'
+        name: 'CXC-Voice'
       },
       {
         state: 1,
         type: 1,
         situation: 1,
-        fullName: 'CXC-Data'
+        name: 'CXC-Data'
       },
-    )
+    ])
   }
 }

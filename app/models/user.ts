@@ -1,8 +1,11 @@
 import { DateTime } from 'luxon'
 import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
-import { BaseModel, column } from '@adonisjs/lucid/orm'
+import { BaseModel, column, belongsTo } from '@adonisjs/lucid/orm'
+import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
+import Area from './area.js'
+import Role from './role.js'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -13,10 +16,10 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @column({ isPrimary: true })
   declare id: number
 
-  @column()
-  declare rolId: number
+  @column({ columnName: 'role_id' })
+  declare roleId: number
 
-  @column()
+  @column({ columnName: 'area_id' })
   declare areaId: number
 
   @column()
@@ -45,4 +48,16 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
+
+  @belongsTo(() => Area, {
+    foreignKey: 'areaId',
+    localKey: 'id'
+  })
+  declare area: BelongsTo<typeof Area>
+
+  @belongsTo(() => Role, {
+    foreignKey: 'roleId',
+    localKey: 'id'
+  })
+  declare role: BelongsTo<typeof Role>
 }

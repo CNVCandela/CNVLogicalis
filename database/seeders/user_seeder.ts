@@ -8,7 +8,7 @@ export default class UserSeeder extends BaseSeeder {
         state: 1,
         type: 1,
         situation: 1,
-        rol_id: 1,
+        role_id: 1,
         area_id: 1,
         fullName: 'CXC Voice Team',
         email: 'cxc-voiceteam@convergia.io',

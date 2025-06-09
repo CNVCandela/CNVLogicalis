@@ -1,33 +1,33 @@
-import Role from '#models/rol'
+import Role from '#models/role'
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
 
 export default class extends BaseSeeder {
   async run() {
-    await Role.create(
+    await Role.createMany([
       {
         state: 1,
         type: 1,
         situation: 1,
-        fullName: 'Super Admin'
+        name: 'Super Admin'
       },
       {
         state: 1,
         type: 1,
         situation: 1,
-        fullName: 'Admin'
+        name: 'Admin'
       },
       {
         state: 1,
         type: 1,
         situation: 1,
-        fullName: 'Supervisor'
+        name: 'Supervisor'
       },
       {
         state: 1,
         type: 1,
         situation: 1,
-        fullName: 'User'
-      }
-    )
+        name: 'User'
+      },
+    ])
   }
 }

@@ -9,7 +9,7 @@ export default class extends BaseSchema {
       table.integer('state').defaultTo(0).notNullable()
       table.integer('type').defaultTo(0).notNullable()
       table.integer('situation').defaultTo(0).notNullable()
-      table.string('full_name').nullable()
+      table.string('name').nullable()
 
       table.timestamp('created_at')
       table.timestamp('updated_at')
