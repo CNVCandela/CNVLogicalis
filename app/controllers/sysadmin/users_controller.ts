@@ -9,11 +9,6 @@ export default class UsersController {
     try {
       //const records = await db.from('users').select('*');
       const records = await User.query().preload('area').preload('role');
-      /*
-      const records = await User.query()
-        .join('areas', 'users.area_id', 'areas.id')
-        .select('users.*', 'areas.name as area_name')
-      */
       console.log('Log Records:', records);
       return view.render('sysadmin/sysusers/index', {
         records: records
@@ -30,7 +25,23 @@ export default class UsersController {
   /**
    * Display form to create a new record
    */
-  async create({ }: HttpContext) { }
+  async create({ view }: HttpContext) {
+    try {
+      const roles = await Role.query().orderBy('name', 'asc');
+      const areas = await Area.query().orderBy('name', 'asc');
+      return view.render('sysadmin/sysusers/create', {
+        roles: roles,
+        areas: areas
+      });
+    } catch (error) {
+      console.error('Error fetching roles or areas:', error);
+      return view.render('sysadmin/sysusers/create', {
+        roles: [],
+        areas: [],
+        error: 'Error fetching roles or areas'
+      });
+    }
+  }
 
   /**
    * Handle form submission for the create action

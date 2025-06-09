@@ -1,0 +1,48 @@
+@layout({ title: 'Module Users / Create Record', menu01: 'active bg-gradient-primary' })
+
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div class="card my-4">
+      <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+        <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+          <h6 class="text-white text-capitalize ps-3">Module Users / Create</h6>
+        </div>
+        <div class="row mt-2">
+
+          @flashMessage('validationError')
+          <div class="notification {{ $message.type }}">
+            <li> <b>Error:</b> {{ $message.message }}</li>
+          </div>
+          @end
+
+          @flashMessage('notification')
+          <div class="notification {{ $message.type }}">
+            <span class="text-sm">Revisar el Error.</span>
+            <button type="button" class="btn-close text-lg py-3 opacity-10" data-bs-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            @each(message in $message.message)
+            <li>{{ message }}</li>
+            @end
+          </div>
+          @end
+
+          <div class="col-6">
+          </div>
+          <div class="col-2"></div>
+          <div class="col-4">
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-12">
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+@end

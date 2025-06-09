@@ -36,7 +36,7 @@ router.group(() => {
 
   router.group(() => {
     router.post('users/:id', [SysUsersController, 'update']).as('users.update');
-    router.resource('users', SysUsersController).only(['index', 'store', 'show'])
+    router.resource('users', SysUsersController).only(['index', 'create', 'store', 'show', 'edit'])
 
     router.post('areas/:id', [SysAreasController, 'update']).as('areas.update');
     router.resource('areas', SysAreasController).only(['index', 'store', 'show'])

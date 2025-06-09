@@ -35,9 +35,8 @@
           </div>
           <div class="col-2"></div>
           <div class="col-4">
-            <button type="button" class="btn btn-info w-lg-100" wire:click="resetInputFields()" data-bs-toggle="modal"
-              data-bs-target="#createModal"> <i class="fa fa-plus-square mr-2"></i> Create User
-            </button>
+            <a class="btn btn-info w-lg-100" href="{{ route('sysadmin.users.create') }}"><i
+                class="fa fa-plus-square mr-2"></i> Create User</a>
           </div>
         </div>
       </div>
