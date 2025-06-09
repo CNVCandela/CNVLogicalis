@@ -2,7 +2,8 @@ import User from '#models/user'
 import Role from '#models/role'
 import Area from '#models/area'
 import type { HttpContext } from '@adonisjs/core/http'
-import db from '@adonisjs/lucid/services/db'
+//import db from '@adonisjs/lucid/services/db'
+import vine from '@vinejs/vine'
 
 export default class UsersController {
   async index({ view }: HttpContext) {
@@ -46,8 +47,102 @@ export default class UsersController {
   /**
    * Handle form submission for the create action
    */
-  async store({ request }: HttpContext) { }
+  async store({ request, response, session }: HttpContext) {
+    const username = request.input('form_name');
+    const email = request.input('form_email');
+    const password = request.input('form_password');
+    const roles = request.input('form_role');
+    const areas = request.input('form_area');
 
+    console.log('New User' + ' Fullname:', username + ' Email:', email + ' Password:', password + ' Role:', roles + ' Area:', areas);
+
+    const existingUser = await User.findBy('email', email);
+    if (existingUser) {
+      session.flash('validationError', {
+        type: 'alert alert-danger alert-dismissible text-white fade show',
+        message: ['El correo electrónico ya está registrado.']
+      });
+      return response.redirect().back();
+    }
+
+    const registerValidator = vine.object({
+      username: vine.string().maxLength(100),
+      email: vine.string().email(),
+      password: vine.string().minLength(8),
+      roles: vine.number().min(1),
+      areas: vine.number().min(1),
+    });
+
+    const messages = {
+      'username.required': 'El nombre de usuario es obligatorio.',
+      'username.maxLength': 'El nombre de usuario no puede tener más de 100 caracteres.',
+      'email.required': 'El correo electrónico es obligatorio.',
+      'email.email': 'Debe ingresar un correo electrónico válido.',
+      'password.required': 'La contraseña es obligatoria.',
+      'password.minLength': 'La contraseña debe tener al menos 8 caracteres.',
+      'roles.min': 'El rol debe ser diferente de 0.',
+      'areas.min': 'El área debe ser diferente de 0.',
+    };
+
+    let data;
+    try {
+      data = await vine.validate({
+        schema: registerValidator,
+        data: {
+          username,
+          email,
+          password,
+          roles,
+          areas,
+        },
+        messages,
+      });
+    } catch (error) {
+      const customErrors = error.messages.map((message) => ({
+        message: messages[`${message.field}.${message.rule}`] || message.message,
+      }));
+      console.log("Se Producjo Error en Campos");
+      console.log(customErrors);
+      session.flash('old', {
+        username,
+        email,
+        password,
+        roles,
+        areas,
+      });
+      session.flash('notification', {
+        type: 'alert alert-warning alert-dismissible text-white fade show',
+        message: customErrors.map(error => error.message)
+      });
+      return response.redirect().back();
+    }
+
+    const userData = {
+      fullName: data.username,
+      email: data.email,
+      password: data.password,
+      recover: data.password,
+    };
+
+    console.log(userData);
+
+    //const user = await User.create(userData);
+    const user = new User()
+    user.state = 1
+    user.type = 1
+    user.situation = 1
+    user.fullName = data.username
+    user.email = data.email
+    user.password = data.password
+    user.recover = data.password
+    user.areaId = data.areas
+    user.roleId = data.roles
+    await user.save()
+
+    console.log(user);
+
+    return response.redirect().toRoute('sysadmin.users.index');
+  }
   /**
    * Show individual record
    */

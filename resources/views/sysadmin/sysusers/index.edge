@@ -68,8 +68,8 @@
                     <td class="">{{ row.id }}</td>
                     <td class="">{{ row.fullName }}</td>
                     <td class="">{{ row.email }}</td>
-                    <td class="">{{ row.area.name }}</td>
-                    <td class="">{{ row.role.name }}</td>
+                    <td>{{ row.area ? row.area.name : '-' }}</td>
+                    <td>{{ row.role ? row.role.name : '-' }}</td>
                     <td class="text-center">
                       <div class="btn-group">
                         <button type="button" onclick="SelectRecord({{ row.id }})" data-bs-toggle="modal"
