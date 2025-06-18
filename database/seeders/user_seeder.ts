@@ -5,6 +5,7 @@ export default class UserSeeder extends BaseSeeder {
   async run() {
     await User.create(
       {
+        uuid: '0000001',
         state: 1,
         type: 1,
         situation: 1,

@@ -1,11 +1,11 @@
-@layout({ title: 'Create User', menu01: 'active bg-gradient-primary' })
+@layout({ title: 'Edit User', menu01: 'active bg-gradient-primary' })
 
 <div class="row justify-content-center">
   <div class="col-8">
     <div class="card my-4">
       <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
         <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-          <h6 class="text-white text-capitalize ps-3">Module Users / Create</h6>
+          <h6 class="text-white text-capitalize ps-3">Module Users / Edit User - ID: {{record.id}}</h6>
         </div>
         <div class="row mt-2">
 
@@ -40,14 +40,16 @@
           <li> <b>Error:</b> {{ $message.message }}</li>
         </div>
         @end
-        <form role="form" action="{{ route('sysadmin.users.store') }}" method="POST">
+        <form role="form" action="/sysadmin/users/{{ record.id }}" method="POST">
           {{ csrfField() }}
+          <input type="hidden" name="_method" value="PUT">
+          <input type="hidden" name="user_id" value="{{record.id}}">
           <div class="row">
             <div class="col-12">
               <div class="input-group input-group-static">
                 <label>Full Name</label>
                 <input name="form_name" type="text" class="form-control" onfocus="focused(this)"
-                  onfocusout="defocused(this)" value="{{ flashMessages.get('old.username', '') }}">
+                  onfocusout="defocused(this)" value="{{ flashMessages.get('old.username', record.fullName) }}">
               </div>
             </div>
           </div>
@@ -56,7 +58,7 @@
               <div class="input-group input-group-static">
                 <label>Email</label>
                 <input name="form_email" type="text" class="form-control" onfocus="focused(this)"
-                  onfocusout="defocused(this)" value="{{ flashMessages.get('old.email', '') }}">
+                  onfocusout="defocused(this)" value="{{ flashMessages.get('old.email', record.email) }}">
               </div>
             </div>
           </div>
@@ -65,7 +67,7 @@
               <div class="input-group input-group-static">
                 <label>Password</label>
                 <input name="form_password" type="text" class="form-control" onfocus="focused(this)"
-                  onfocusout="defocused(this)" value="{{ flashMessages.get('old.password', '') }}" </div>
+                  onfocusout="defocused(this)" value="{{ flashMessages.get('old.password', record.recover) }}" </div>
               </div>
             </div>
             <div class="row">
@@ -76,7 +78,7 @@
                     <select class="form-control select2" name="form_role">
                       <option value="0">Select Role</option>
                       @each(reg in roles)
-                      <option value="{{ reg.id }}" {{ flashMessages.get('old.roles')==reg.id ? 'selected' : '' }}>
+                      <option value="{{ reg.id }}" {{ record.roleId==reg.id ? 'selected' : '' }}>
                         {{ reg.name }}
                       </option>
                       @end
@@ -90,7 +92,7 @@
                   <select class="form-control select2" name="form_area">
                     <option value="0">Select Area</option>
                     @each(reg in areas)
-                    <option value="{{ reg.id }}" {{ flashMessages.get('old.areas')==reg.id ? 'selected' : '' }}>
+                    <option value="{{ reg.id }}" {{ record.areaId==reg.id ? 'selected' : '' }}>
                       {{ reg.name }}
                     </option>
                     @end
@@ -114,5 +116,5 @@
 
 @pushOnceTo('breadcrumb')
 <li class="breadcrumb-item text-sm text-dark active"><a class="font-weight-bolder text-dark"
-    href="{{ route('sysadmin.users.create') }}">Create New User</a></li>
+    href="{{ route('sysadmin.users.create') }}">Edit User</a></li>
 @end

@@ -1,5 +1,8 @@
+@pushOnceTo('breadcrumb')
+<li class="breadcrumb-item text-sm text-dark active"><a class="font-weight-bolder text-dark"
+    href="{{ route('sysadmin.users.index') }}">Module Users</a></li>
+@end
 @layout({ title: 'Module Users', menu01: 'active bg-gradient-primary' })
-
 <div class="row justify-content-center">
   <div class="col-12">
     <div class="card my-4">
@@ -26,11 +29,15 @@
             @end
           </div>
           @end
-
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="row">
           <div class="col-6">
-            <div wire:model.live="search" class="input-group input-group-outline">
+            <div class="input-group input-group-outline">
               <label class="form-label"></label>
-              <input type="text" class="form-control" placeholder="Search">
+              <input type="text" name="search" class="form-control" placeholder="Search">
+              <button class="btn btn-success my-2 my-sm-0" type="submit"><i class="fa fa-search"></i></button>
             </div>
           </div>
           <div class="col-2"></div>
@@ -39,25 +46,23 @@
                 class="fa fa-plus-square mr-2"></i> Create User</a>
           </div>
         </div>
-      </div>
-      <div class="card-body">
         <div class="row">
           <div class="col-12">
             <div class="table-responsive p-0">
-              <table class="table align-items-center mb-0">
+              <table class="CNVTable">
                 <thead>
                   <tr>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                    <th class="text-uppercase text-xxs font-weight-bolder opacity-8">
                       UserID</th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                    <th class="text-uppercase text-xxs font-weight-bolder opacity-8">
                       Name</th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                    <th class="text-uppercase text-xxs font-weight-bolder opacity-8">
                       Email</th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                    <th class="text-uppercase text-xxs font-weight-bolder opacity-8">
                       Area</th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                    <th class="text-uppercase text-xxs font-weight-bolder opacity-8">
                       Role</th>
-                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                    <th class="text-center text-uppercase text-xxs font-weight-bolder opacity-8">
                       Options
                     </th>
                   </tr>
@@ -65,15 +70,17 @@
                 <tbody>
                   @each(row in records)
                   <tr>
-                    <td class="">{{ row.id }}</td>
-                    <td class="">{{ row.fullName }}</td>
-                    <td class="">{{ row.email }}</td>
+                    <td>{{ row.id }}</td>
+                    <td>{{ row.fullName }}</td>
+                    <td>{{ row.email }}</td>
                     <td>{{ row.area ? row.area.name : '-' }}</td>
                     <td>{{ row.role ? row.role.name : '-' }}</td>
                     <td class="text-center">
                       <div class="btn-group">
-                        <button type="button" onclick="SelectRecord({{ row.id }})" data-bs-toggle="modal"
-                          data-bs-target="#editModal" class="btn btn-warning btn-sm mt-2">Edit</button>
+                        <a class="btn btn-sm btn-info" href="/sysadmin/users/{{ row.id }}"><i
+                            class="fa fa-pencil"></i> Edit</a>
+                        <a class="btn btn-sm btn-danger" href="/sysadmin/users/{{ row.id }}/delete"><i
+                            class="fa fa-trash"></i> Delete</a>
                       </div>
                     </td>
                   </tr>
@@ -81,23 +88,65 @@
                 </tbody>
               </table>
             </div>
-            <div class="row">
-              <nav class="mt-3" aria-label="Page navigation example">
-                <ul class="pagination justify-content-center pagination-primary">
-
-                </ul>
-              </nav>
-            </div>
           </div>
+        </div>
+        <hr>
+        <div class="row">
+          <nav class="mt-3" aria-label="Page navigation example">
+            <ul class="pagination justify-content-center pagination-primary">
+              <!-- Números de página -->
+              @each(anchor in records.getUrlsForRange(1, records.lastPage))
+              <li class="page-item {{ anchor.page === records.currentPage ? 'active' : '' }}">
+                <a class="page-link" href="{{ anchor.url }}">{{ anchor.page }}</a>
+              </li>
+              @endeach
+
+            </ul>
+          </nav>
         </div>
       </div>
     </div>
   </div>
 </div>
-
 @end
 
-@pushOnceTo('breadcrumb')
-<li class="breadcrumb-item text-sm text-dark active"><a class="font-weight-bolder text-dark"
-    href="{{ route('sysadmin.users.index') }}">Module Users</a></li>
+@pushOnceTo('css')
+<style>
+  table.CNVTable {
+  border: 1px solid #1C6EA4;
+  width: 100%;
+  border-collapse: collapse;
+}
+table.CNVTable td, table.CNVTable th {
+  border: 1px solid #AAAAAA;
+  padding: 2px 3px;
+}
+table.CNVTable tbody td {
+  font-size: 13px;
+}
+table.CNVTable thead {
+  background: #8C1F9E;
+  background: -moz-linear-gradient(top, #a957b6 0%, #9735a7 66%, #8C1F9E 100%);
+  background: -webkit-linear-gradient(top, #a957b6 0%, #9735a7 66%, #8C1F9E 100%);
+  background: linear-gradient(to bottom, #a957b6 0%, #9735a7 66%, #8C1F9E 100%);
+}
+table.CNVTable thead th {
+  font-size: 13px;
+  font-weight: bold;
+  color: #FFFFFF;
+}
+table.CNVTable tfoot td {
+  font-size: 14px;
+}
+table.CNVTable tfoot .links {
+  text-align: right;
+}
+table.CNVTable tfoot .links a{
+  display: inline-block;
+  background: #1C6EA4;
+  color: #FFFFFF;
+  padding: 2px 8px;
+  border-radius: 5px;
+}
+</style>
 @end

@@ -6,11 +6,14 @@ import type { HttpContext } from '@adonisjs/core/http'
 import vine from '@vinejs/vine'
 
 export default class UsersController {
-  async index({ view }: HttpContext) {
+  async index({ request, view }: HttpContext) {
     try {
+      const page = request.input('page', 1)
+      const limit = 10
       //const records = await db.from('users').select('*');
-      const records = await User.query().preload('area').preload('role');
-      console.log('Log Records:', records);
+      const records = await User.query().preload('area').preload('role').orderBy('fullName', 'asc').paginate(page, limit);
+      records.baseUrl('/sysadmin/users')
+      console.log('Lista de Usuarios');
       return view.render('sysadmin/sysusers/index', {
         records: records
       });
@@ -146,17 +149,101 @@ export default class UsersController {
   /**
    * Show individual record
    */
-  async show({ params }: HttpContext) { }
+  async show({ params, view, response }: HttpContext) {
+    const user = await User.find(params.id);
+    console.log('Show User ID: '+ user?.id + ' User Name: ' + user?.fullName + ' User Email: ' + user?.email);
+    if (user) {
+      const roles = await Role.query().orderBy('name', 'asc');
+      const areas = await Area.query().orderBy('name', 'asc');
+      return view.render('sysadmin/sysusers/edit', {
+        record: user,
+        roles: roles,
+        areas: areas
+      });
+    } else {
+      return response.redirect().toRoute('sysadmin.users.index');
+    }
+
+  }
 
   /**
    * Edit individual record
    */
-  async edit({ params }: HttpContext) { }
+  async edit({ params, view, response }: HttpContext) {
+    console.log(params);
+    const user = await User.find(params.id);
+    if (!user) {
+      return response.status(404).json({ message: "User not found" });
+    }
+    return response.json(user);
+  }
 
   /**
    * Handle form submission for the edit action
    */
-  async update({ params, request }: HttpContext) { }
+  async update({ request, response, session }: HttpContext) {
+    const userID = request.input('user_id');
+    const username = request.input('form_name');
+    const password = request.input('form_password');
+    const roles = request.input('form_role');
+    const areas = request.input('form_area');
+
+    console.log('Edit User' + ' Fullname:', username + ' Password:', 
+                password + ' Role:', roles + ' Area:', areas);
+
+    const registerValidator = vine.object({
+      username: vine.string().maxLength(100),
+      password: vine.string().minLength(8),
+      roles: vine.number().min(1),
+      areas: vine.number().min(1),
+    });
+
+    const messages = {
+      'username.required': 'El nombre de usuario es obligatorio.',
+      'username.maxLength': 'El nombre de usuario no puede tener más de 100 caracteres.',
+      'password.required': 'La contraseña es obligatoria.',
+      'password.minLength': 'La contraseña debe tener al menos 8 caracteres.',
+      'roles.min': 'El rol debe ser diferente de 0.',
+      'areas.min': 'El área debe ser diferente de 0.',
+    };
+
+    let data;
+    try {
+      data = await vine.validate({
+        schema: registerValidator,
+        data: {
+          username,
+          password,
+          roles,
+          areas,  
+        },
+        messages,
+      });
+    } catch (error) {
+      const customErrors = error.messages.map((message) => ({
+        message: messages[`${message.field}.${message.rule}`] || message.message,
+      }));
+      console.log(customErrors);
+
+      session.flash('notification', {
+        type: 'alert alert-warning alert-dismissible text-white fade show',
+        message: customErrors.map(error => error.message)
+      });
+      return response.redirect().back();
+    }
+
+    const user = await User.findOrFail(userID);
+    user.areaId = data.areas
+    user.roleId = data.roles
+    user.fullName = data.username
+    user.password = data.password
+    user.recover = data.password
+    await user.save()
+
+    console.log(user);
+
+    return response.redirect().toRoute('sysadmin.users.index');
+   }
 
   /**
    * Delete record

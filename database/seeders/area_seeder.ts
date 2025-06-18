@@ -8,13 +8,37 @@ export default class extends BaseSeeder {
         state: 1,
         type: 1,
         situation: 1,
-        name: 'CXC-Voice'
+        name: 'CXC Voice'
       },
       {
         state: 1,
         type: 1,
         situation: 1,
-        name: 'CXC-Data'
+        name: 'CXC Data'
+      },
+      {
+        state: 1,
+        type: 1,
+        situation: 1,
+        name: 'CXC Mexico'
+      },
+      {
+        state: 1,
+        type: 1,
+        situation: 1,
+        name: 'CXC Peru'
+      },
+      {
+        state: 1,
+        type: 1,
+        situation: 1,
+        name: 'CXC US-CA'
+      },
+      {
+        state: 1,
+        type: 1,
+        situation: 1,
+        name: 'CXC Cono Sur'
       },
     ])
   }
