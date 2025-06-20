@@ -9,7 +9,7 @@ export default class UsersController {
   async index({ request, view }: HttpContext) {
     try {
       const page = request.input('page', 1)
-      const limit = 10
+      const limit = 20
       //const records = await db.from('users').select('*');
       const records = await User.query().preload('area').preload('role').orderBy('fullName', 'asc').paginate(page, limit);
       records.baseUrl('/sysadmin/users')
@@ -26,6 +26,36 @@ export default class UsersController {
     }
   }
 
+  async search({ request, view }: HttpContext) {
+    try {
+      const searchTerm = request.input('search')
+      const page = request.input('page', 1)
+      const limit = 20
+  
+      const query = User.query()
+        .preload('area')
+        .preload('role')
+        .orderBy('fullName', 'asc')
+  
+      if (searchTerm) {
+        query.where((q) => {
+          q.where('fullName', 'ILIKE', `%${searchTerm}%`)
+           .orWhere('email', 'ILIKE', `%${searchTerm}%`)
+        })
+      }
+  
+      const records = await query.paginate(page, limit)
+      records.baseUrl('/sysadmin/users')
+  
+      return view.render('sysadmin/sysusers/index', { records })
+    } catch (error) {
+      console.error(error)
+      return view.render('sysadmin/sysusers/index', { 
+        records: [],
+        error: 'Error en la búsqueda'
+      })
+    }
+  }
   /**
    * Display form to create a new record
    */
@@ -188,8 +218,7 @@ export default class UsersController {
     const roles = request.input('form_role');
     const areas = request.input('form_area');
 
-    console.log('Edit User' + ' Fullname:', username + ' Password:', 
-                password + ' Role:', roles + ' Area:', areas);
+    console.log('Edit User' + ' Fullname:', username + ' Password:', password + ' Role:', roles + ' Area:', areas);
 
     const registerValidator = vine.object({
       username: vine.string().maxLength(100),
@@ -239,8 +268,6 @@ export default class UsersController {
     user.password = data.password
     user.recover = data.password
     await user.save()
-
-    console.log(user);
 
     return response.redirect().toRoute('sysadmin.users.index');
    }

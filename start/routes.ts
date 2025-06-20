@@ -35,6 +35,7 @@ router.group(() => {
   router.get('/dashboard', [DashboardController, 'index']).as('dashboard')
 
   router.group(() => {
+    router.post('users/search', [SysUsersController, 'search']).as('users.search');
     router.post('users/:id', [SysUsersController, 'update']).as('users.update');
     router.resource('users', SysUsersController).only(['index', 'create', 'store', 'show', 'edit'])
 
