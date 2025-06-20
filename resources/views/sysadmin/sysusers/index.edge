@@ -73,16 +73,16 @@
                 <tbody>
                   @each(row in records)
                   <tr>
-                    <td>{{ row.id }}</td>
-                    <td>{{ row.fullName }}</td>
-                    <td>{{ row.email }}</td>
-                    <td>{{ row.area ? row.area.name : '-' }}</td>
-                    <td>{{ row.role ? row.role.name : '-' }}</td>
-                    <td class="align-middle">
+                    <td  width="10%">{{ row.id }}</td>
+                    <td  width="30%">{{ row.fullName }}</td>
+                    <td  width="30%">{{ row.email }}</td>
+                    <td  width="10%">{{ row.area ? row.area.name : '-' }}</td>
+                    <td  width="10%">{{ row.role ? row.role.name : '-' }}</td>
+                    <td width="10%" class="align-middle">
                       <div class="btn-group">
-                        <a class="btn-sm btn-info" href="/sysadmin/users/{{ row.id }}"><i
+                        <a class="btn-sm btn-info" href="{{ route('sysadmin.users.show', { id: row.id }) }}"><i
                             class="fa fa-pencil"></i> Edit</a>
-                        <a class="btn-sm btn-danger" href="/sysadmin/users/{{ row.id }}/delete"><i
+                        <a class="btn-sm btn-danger" href="{{ route('sysadmin.users.state', { id: row.id }) }}"><i
                             class="fa fa-trash"></i> Delete</a> 
                       </div>
                     </td>

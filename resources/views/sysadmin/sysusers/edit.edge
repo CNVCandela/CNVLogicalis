@@ -116,5 +116,5 @@
 
 @pushOnceTo('breadcrumb')
 <li class="breadcrumb-item text-sm text-dark active"><a class="font-weight-bolder text-dark"
-    href="{{ route('sysadmin.users.create') }}">Edit User</a></li>
+    href="{{ route('sysadmin.users.show', { id: record.id }) }}">Edit User</a></li>
 @end

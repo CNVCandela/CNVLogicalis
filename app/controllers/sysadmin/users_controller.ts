@@ -196,6 +196,22 @@ export default class UsersController {
 
   }
 
+  async state({ params, view, response }: HttpContext) {
+    const user = await User.find(params.id);
+    console.log('Show User ID: '+ user?.id + ' User Name: ' + user?.fullName + ' User Email: ' + user?.email);
+    if (user) {
+      const roles = await Role.query().orderBy('name', 'asc');
+      const areas = await Area.query().orderBy('name', 'asc');
+      return view.render('sysadmin/sysusers/edit', {
+        record: user,
+        roles: roles,
+        areas: areas
+      });
+    } else {
+      return response.redirect().toRoute('sysadmin.users.index');
+    }
+
+  }
   /**
    * Edit individual record
    */
