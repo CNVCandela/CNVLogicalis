@@ -401,9 +401,7 @@ export default class WorkSchedulesController {
       record.estado = 5
       record.situacion = 5
       await record.save()
-
       return response.redirect().toRoute('work_schedules.index');
-
     } else {
       return response.redirect().toRoute('work_schedules.index');
     }

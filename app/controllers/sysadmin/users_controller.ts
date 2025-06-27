@@ -179,9 +179,7 @@ export default class UsersController {
 
     return response.redirect().toRoute('sysadmin.users.index');
   }
-  /**
-   * Show individual record
-   */
+
   async show({ params, view, response }: HttpContext) {
     const user = await User.find(params.id);
     console.log('Show User ID: ' + user?.id + ' User Name: ' + user?.fullName + ' User Email: ' + user?.email);
@@ -204,7 +202,7 @@ export default class UsersController {
     const record = await User.findBy('uuid', params.id);
     const currentDate = new Date().toISOString().split('T')[0];
 
-    console.log('Change Status Record ID: ' + record?.id + ' record Name: ' + record?.name + ' record UuID: ' + record?.uuid);
+    console.log('Change Status User ID: ' + record?.id + ' record Name: ' + record?.fullName + ' record UuID: ' + record?.uuid);
     if (record) {
       if (record.state === 1) {
         record.state = 5
@@ -238,9 +236,7 @@ export default class UsersController {
     }
 
   }
-  /**
-   * Edit individual record
-   */
+
   async edit({ params, view, response }: HttpContext) {
     const user = await User.findBy('uuid', params.id);
     console.log('Edit User ID: ' + user?.id + ' User Name: ' + user?.fullName + ' User Email: ' + user?.email);
@@ -257,9 +253,6 @@ export default class UsersController {
     }
   }
 
-  /**
-   * Handle form submission for the edit action
-   */
   async update({ request, response, session }: HttpContext) {
     const userID = request.input('user_id');
     const username = request.input('form_name');
