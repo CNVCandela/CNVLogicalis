@@ -16,37 +16,36 @@ export default class ApiController {
   async store_hl({ request, response }: HttpContext) {
     // const initialResponse = { status: 0, destination: '0', message: '', data: {} } // No es necesario inicializar aquí
 
-    console.log("Date Record Validate WS " + DateTime.now().toFormat('yyyy-MM-dd HH:mm:ss'))
-    console.log(request.all())
-
     const requestData = request.all() // Usar un nombre diferente para evitar conflicto con el modelo ValidateApiRest
 
     const currentDate = DateTime.now().toFormat('yyyy-MM-dd')
     const currentTime = DateTime.now().toFormat('HH:mm')
     const dayOfWeek = DateTime.now().toFormat('EEEE') // Nombre completo del día de la semana (e.g., 'Monday')
 
-    console.log(currentTime)
-    console.log(currentDate)
+    logger.info("Date Record Validate HL " + DateTime.now().toFormat('yyyy-MM-dd HH:mm:ss'))
+    logger.info(request.all())
+    logger.info("Hora Actual: " + currentTime)
+    logger.info("Fecha Actual: " + currentDate)
 
     let finalStatus: number
     let finalMessage: string
     let finalDestination: string = '0' // Inicializar con '0' como en Laravel
 
-    const validate = await Holiday.query().where('date_issue', currentDate).first()
+    const validate = await Holiday.query().where('state', 1).where('dateIssue', currentDate).first()
 
     if (validate) {
       const result = await Holiday.query()
-        .where('date_issue', currentDate)
+        .where('state', 1)
+        .where('dateIssue', currentDate)
         .where((query) => {
-          query.where('time_start', '<=', currentTime)
-            .where('time_end', '>=', currentTime)
+          query.where('dateStart', '<=', currentTime)
+            .where('dateEnd', '>=', currentTime)
         })
         .first()
 
       if (result) {
         finalStatus = 1
         finalMessage = "Validacion - Holiday is OK"
-        finalDestination = result.queue01
       } else {
         finalStatus = 2
         finalMessage = "Validacion - Holiday No Found"
@@ -85,7 +84,7 @@ export default class ApiController {
       data: validateApiRest.serialize() // Serializar el modelo guardado para incluirlo en la respuesta
     }
 
-    console.log(JSON.stringify(responseData))
+    logger.info(JSON.stringify(responseData))
 
     // Actualizar el campo 'result' del registro recién creado
     const updateRecord = await ValidateApiRest.find(validateApiRest.id)
@@ -99,7 +98,7 @@ export default class ApiController {
   /*
   async store_ws({ request, response }: HttpContext) {
       const data = request.all();
-      console.log(data);
+      logger.info(data);
       return response.json(data);
   }
   */
