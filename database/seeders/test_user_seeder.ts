@@ -3,6 +3,6 @@ import { BaseSeeder } from '@adonisjs/lucid/seeders'
 
 export default class extends BaseSeeder {
   async run() {
-    await UserFactory.createMany(10) // Crea 10 usuarios aleatorios
+    await UserFactory.createMany(0) // Crea 10 usuarios aleatorios
   }
 }

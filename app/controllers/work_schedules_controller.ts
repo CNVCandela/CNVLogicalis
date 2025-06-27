@@ -5,9 +5,9 @@ import vine from '@vinejs/vine'
 export default class WorkSchedulesController {
 
   async index({ request, view }: HttpContext) {
+    const searchTerm = ''
+    const searchState = false
     try {
-      const searchTerm = ''
-      const searchState = false
       const page = request.input('page', 1)
       const limit = 20
       const records = await WorkSchedule.query().where('estado', 1).orderBy('createdAt', 'asc').paginate(page, limit);
@@ -21,6 +21,8 @@ export default class WorkSchedulesController {
       console.error('Error fetching data:', error);
       return view.render('workschedules/index', {
         records: [],
+        searchTerm: searchTerm,
+        searchState: searchState,
         error: 'Error fetching data'
       });
     }

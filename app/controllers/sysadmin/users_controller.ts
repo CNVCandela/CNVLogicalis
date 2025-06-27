@@ -7,9 +7,10 @@ import vine from '@vinejs/vine'
 
 export default class UsersController {
   async index({ request, view }: HttpContext) {
+    const searchTerm = ''
+    const searchState = false
+
     try {
-      const searchTerm = ''
-      const searchState = false
       const page = request.input('page', 1)
       const limit = 20
       //const records = await db.from('users').select('*');
@@ -24,6 +25,8 @@ export default class UsersController {
       console.error('Error fetching data:', error);
       return view.render('sysadmin/sysusers/index', {
         records: [],
+        searchTerm: searchTerm,
+        searchState: searchState,
         error: 'Error fetching data'
       });
     }

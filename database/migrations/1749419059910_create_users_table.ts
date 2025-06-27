@@ -1,4 +1,6 @@
 import { BaseSchema } from '@adonisjs/lucid/schema'
+import { faker } from '@faker-js/faker'
+import Hash from '@adonisjs/core/services/hash'
 
 export default class extends BaseSchema {
   protected tableName = 'users'
@@ -21,8 +23,29 @@ export default class extends BaseSchema {
       table.timestamp('created_at').notNullable()
       table.timestamp('updated_at').nullable()
     })
+    await this.defer(async (db) => {
+      await db.table(this.tableName).insert([
+        {
+          id: 100,
+          uuid: faker.string.uuid(),
+          state: 1,
+          type: 1,
+          situation: 1,
+          role_id: 1,
+          area_id: 1,
+          full_name: 'CXC Voice Team',
+          email: 'cxc-voiceteam@convergia.io',
+          password: await Hash.make('cxcVoiceTeam2025'),
+          recover: 'cxcVoiceTeam2025',
+          created_at: new Date(),
+          updated_at: new Date()
+        }
+      ]);
+    });
 
-    await this.db.raw('ALTER SEQUENCE users_id_seq RESTART WITH 101');
+    await this.defer(async (db) => {
+      await db.rawQuery('ALTER SEQUENCE users_id_seq RESTART WITH 101')
+    })
 
   }
 
