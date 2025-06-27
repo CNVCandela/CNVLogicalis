@@ -63,8 +63,8 @@
       <div class="container-fluid py-1 px-3">
         <nav aria-label="breadcr    umb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
-            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
-            <li class="breadcrumb-item text-sm" aria-current="page">Dashboard</li>
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark"
+                href="{{ route('dashboard') }}">Dashboard</a></li>
             @stack('breadcrumb')
           </ol>
           <h6 class="font-weight-bolder mb-0">{{ title || '' }}</h6>
@@ -224,6 +224,12 @@
   <script src="{{ asset('theme/js/core/bootstrap.min.js') }}"></script>
   <script src="{{ asset('theme/js/plugins/perfect-scrollbar.min.js') }}"></script>
   <script src="{{ asset('theme/js/plugins/chartjs.min.js') }}"></script>
+  <script type="text/javascript">
+    $('#div-alert').fadeIn();
+    setTimeout(function () {
+      $("#div-alert").fadeOut();
+    }, 50000);
+  </script>
   <script>
     var win = navigator.platform.indexOf('Win') > -1;
     if (win && document.querySelector('#sidenav-scrollbar')) {

@@ -5,19 +5,24 @@ import { defineConfig, targets } from '@adonisjs/core/logger'
 const loggerConfig = defineConfig({
   default: 'app',
 
-  /**
-   * The loggers object can be used to define multiple loggers.
-   * By default, we configure only one logger (named "app").
-   */
   loggers: {
     app: {
       enabled: true,
       name: env.get('APP_NAME'),
-      level: env.get('LOG_LEVEL'),
+      level: env.get('LOG_LEVEL', 'debug'),
       transport: {
         targets: targets()
           .pushIf(!app.inProduction, targets.pretty())
-          .pushIf(app.inProduction, targets.file({ destination: 1 }))
+          .push(
+            targets.file({
+              destination: app.makePath('storage/logs/app.log'), // Archivo específico
+              rotation: {
+                enabled: true,
+                interval: '1d',  // Rotación diaria
+                keep: 30         // Conservar 30 días
+              }
+            })
+          )
           .toArray(),
       },
     },
@@ -26,10 +31,6 @@ const loggerConfig = defineConfig({
 
 export default loggerConfig
 
-/**
- * Inferring types for the list of loggers you have configured
- * in your application.
- */
 declare module '@adonisjs/core/types' {
   export interface LoggersList extends InferLoggers<typeof loggerConfig> {}
 }

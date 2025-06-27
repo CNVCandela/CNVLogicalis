@@ -11,6 +11,6 @@ export const UserFactory = factory.define(User, ({ faker }) => {
     fullName: faker.person.fullName(),
     email: faker.internet.email(),
     password: 'password', // Default password
-    recover: faker.string.uuid(),
+    recover: 'N3wP4ssw0rd',
   }
 }).build()

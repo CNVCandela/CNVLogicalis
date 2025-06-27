@@ -1,0 +1,333 @@
+@layout({ title: 'Create Work Schedule', menu04: 'active bg-gradient-primary' })
+
+<div class="row justify-content-center">
+  <div class="col-10">
+    <div class="card my-4">
+      <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+        <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+          <h6 class="text-white text-capitalize ps-3">Module Work Schedules / Create</h6>
+        </div>
+        <div class="row mt-2">
+          <div class="col-12">
+            @flashMessage('notification')
+            <div class="alert alert-danger alert-dismissible text-white" role="alert">
+              <span class="text-sm">Check Error Please:</span>
+              <button type="button" class="btn-close text-lg py-3 opacity-10" data-bs-dismiss="alert"
+                aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              @each(message in $message.message)
+              <li>{{ message }}</li>
+              @end
+            </div>
+            @end
+
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <form role="form" action="{{ route('work_schedules.store') }}" method="POST">
+          {{ csrfField() }}
+
+
+          <div class="row">
+            <div class="col-md-4">
+              <label class="form-label text-bold">Work Schedule Name</label>
+              <div class="input-group input-group-outline">
+                <label class="form-label"></label>
+                <input type="text" class="form-control" name="ws_name" id="ws_name"
+                  placeholder="Enter Work Schedule Name" value="{{ flashMessages.get('old.ws_name', '') }}">
+              </div>
+            </div>
+            <div class="col-md-2">
+              <label class="form-label text-bold">N° CFD 3CX</label>
+              <div class="input-group input-group-outline">
+                <label class="form-label"></label>
+                <input type="text" class="form-control" name="ws_cfd3cx" id="ws_cfd3cx"
+                  placeholder="Enter CFD 3CX Number" value="{{ flashMessages.get('old.ws_cfd3cx', ws_cfd3cx) }}">
+              </div>
+            </div>
+            <div class="col-md-2">
+              <label class="form-label text-bold">Module</label>
+              <div class="input-group input-group-outline">
+                <label class="form-label"></label>
+                <select class="form-control" name="ws_module" id="ws_module">
+                  <option value="0" {{ flashMessages.get('old.ws_module')==0 ? 'selected' : '' }}>Select Option</option>
+                  <option value="1" {{ flashMessages.get('old.ws_module')==1 ? 'selected' : '' }}>Escalomiento</option>
+                  <option value="2" {{ flashMessages.get('old.ws_module')==2 ? 'selected' : '' }}>Plantones</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <label class="form-label text-bold">Code Module</label>
+              <div class="input-group input-group-outline">
+                <label class="form-label"></label>
+                <input type="text" class="form-control" name="ws_code_module" id="ws_code_module"
+                  value="{{ flashMessages.get('old.ws_code_module', ws_code_module) }}">
+              </div>
+            </div>
+            <div class="col-md-2">
+              <label class="form-label text-bold">No Time Condition</label>
+              <div class="input-group input-group-outline">
+                <label class="form-label"></label>
+                <input type="text" class="form-control" name="ws_no_time_condition" id="ws_no_time_condition"
+                  value="{{ flashMessages.get('old.ws_no_time_condition', ws_no_time_condition) }}">
+              </div>
+            </div>
+          </div>
+          <hr>
+          <div class="row mt-2">
+            <div class="col-sm-3">
+              <label class="form-label text-bold">Day of Week</label>
+              <div class="form-check form-check-custom form-check-solid">
+                <input class="form-check-input" type="checkbox" id="flexCheckDefault01" name="day1" checked>
+                <label class="form-check-label" for="flexCheckDefault01">Monday</label>
+              </div>
+            </div>
+
+            <div class="col-md-2">
+              <label class="form-label text-bold">Time Start</label>
+              <div class="input-group input-group-outline">
+                <label class="form-label"></label>
+                <input type="time" class="form-control" name="day1t1" value="{{ dayt1 }}">
+              </div>
+            </div>
+            <div class="col-md-2">
+              <label class="form-label text-bold">Time End</label>
+              <div class="input-group input-group-outline">
+                <label class="form-label"></label>
+                <input type="time" class="form-control" name="day1t2" value="{{ dayt2 }}">
+              </div>
+            </div>
+            <div class="col-md-2">
+              <label class="form-label text-bold">Office Hours</label>
+              <div class="input-group input-group-outline">
+                <label class="form-label"></label>
+                <input type="text" class="form-control" name="day1dst1" value="{{ daydst1 }}">
+              </div>
+            </div>
+            <div class="col-md-2">
+              <label class="form-label text-bold">Out of Office</label>
+              <div class="input-group input-group-outline">
+                <label class="form-label"></label>
+                <input type="text" class="form-control" name="day1dst2" value="{{ daydst2 }}">
+              </div>
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="col-sm-3">
+              <div class="form-check form-check-custom form-check-solid">
+                <input class="form-check-input" type="checkbox" id="flexCheckDefault02" name="day2" checked>
+                <label class="form-check-label" for="flexCheckDefault02">Tuesday</label>
+              </div>
+            </div>
+
+            <div class="col-md-2">
+              <div class="input-group input-group-outline">
+                <label class="form-label"></label>
+                <input type="time" class="form-control" name="day2t1" value="{{ dayt1 }}">
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="input-group input-group-outline">
+                <label class="form-label"></label>
+                <input type="time" class="form-control" name="day2t2" value="{{ dayt2 }}">
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="input-group input-group-outline">
+                <label class="form-label"></label>
+                <input type="text" class="form-control" name="day2dst1" value="{{ daydst1 }}">
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="input-group input-group-outline">
+                <label class="form-label"></label>
+                <input type="text" class="form-control" name="day2dst2" value="{{ daydst2 }}">
+              </div>
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="col-sm-3">
+              <div class="form-check form-check-custom form-check-solid">
+                <input class="form-check-input" type="checkbox" id="flexCheckDefault03" name="day3" checked>
+                <label class="form-check-label" for="flexCheckDefault03">Wednesday</label>
+              </div>
+            </div>
+
+            <div class="col-md-2">
+              <div class="input-group input-group-outline">
+                <label class="form-label"></label>
+                <input type="time" class="form-control" name="day3t1" value="{{ dayt1 }}">
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="input-group input-group-outline">
+                <label class="form-label"></label>
+                <input type="time" class="form-control" name="day3t2" value="{{ dayt2 }}">
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="input-group input-group-outline">
+                <label class="form-label"></label>
+                <input type="text" class="form-control" name="day3dst1" value="{{ daydst1 }}">
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="input-group input-group-outline">
+                <label class="form-label"></label>
+                <input type="text" class="form-control" name="day3dst2" value="{{ daydst2 }}">
+              </div>
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="col-sm-3">
+              <div class="form-check form-check-custom form-check-solid">
+                <input class="form-check-input" type="checkbox" id="flexCheckDefault04" name="day4" checked>
+                <label class="form-check-label" for="flexCheckDefault04">Thursday</label>
+              </div>
+            </div>
+
+            <div class="col-md-2">
+              <div class="input-group input-group-outline">
+                <label class="form-label"></label>
+                <input type="time" class="form-control" name="day4t1" value="{{ dayt1 }}">
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="input-group input-group-outline">
+                <label class="form-label"></label>
+                <input type="time" class="form-control" name="day4t2" value="{{ dayt2 }}">
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="input-group input-group-outline">
+                <label class="form-label"></label>
+                <input type="text" class="form-control" name="day4dst1" value="{{ daydst1 }}">
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="input-group input-group-outline">
+                <label class="form-label"></label>
+                <input type="text" class="form-control" name="day4dst2" value="{{ daydst2 }}">
+              </div>
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="col-sm-3">
+              <div class="form-check form-check-custom form-check-solid">
+                <input class="form-check-input" type="checkbox" id="flexCheckDefault05" name="day5" checked>
+                <label class="form-check-label" for="flexCheckDefault05">Friday</label>
+              </div>
+            </div>
+
+            <div class="col-md-2">
+              <div class="input-group input-group-outline">
+                <label class="form-label"></label>
+                <input type="time" class="form-control" name="day5t1" value="{{ dayt1 }}">
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="input-group input-group-outline">
+                <label class="form-label"></label>
+                <input type="time" class="form-control" name="day5t2" value="{{ dayt2 }}">
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="input-group input-group-outline">
+                <label class="form-label"></label>
+                <input type="text" class="form-control" name="day5dst1" value="{{ daydst1 }}">
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="input-group input-group-outline">
+                <label class="form-label"></label>
+                <input type="text" class="form-control" name="day5dst2" value="{{ daydst2 }}">
+              </div>
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="col-sm-3">
+              <div class="form-check form-check-custom form-check-solid">
+                <input class="form-check-input" type="checkbox" id="flexCheckDefault06" name="day6" checked>
+                <label class="form-check-label" for="flexCheckDefault06">Saturday</label>
+              </div>
+            </div>
+
+            <div class="col-md-2">
+              <div class="input-group input-group-outline">
+                <label class="form-label"></label>
+                <input type="time" class="form-control" name="day6t1" value="{{ dayt1 }}">
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="input-group input-group-outline">
+                <label class="form-label"></label>
+                <input type="time" class="form-control" name="day6t2" value="{{ dayt2 }}">
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="input-group input-group-outline">
+                <label class="form-label"></label>
+                <input type="text" class="form-control" name="day6dst1" value="{{ daydst1 }}">
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="input-group input-group-outline">
+                <label class="form-label"></label>
+                <input type="text" class="form-control" name="day6dst2" value="{{ daydst2 }}">
+              </div>
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="col-sm-3">
+              <div class="form-check form-check-custom form-check-solid">
+                <input class="form-check-input" type="checkbox" id="flexCheckDefault07" name="day7" checked>
+                <label class="form-check-label" for="flexCheckDefault07">Sunday</label>
+              </div>
+            </div>
+
+            <div class="col-md-2">
+              <div class="input-group input-group-outline">
+                <label class="form-label"></label>
+                <input type="time" class="form-control" name="day7t1" value="{{ dayt1 }}">
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="input-group input-group-outline">
+                <label class="form-label"></label>
+                <input type="time" class="form-control" name="day7t2" value="{{ dayt2 }}">
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="input-group input-group-outline">
+                <label class="form-label"></label>
+                <input type="text" class="form-control" name="day7dst1" value="{{ daydst1 }}">
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="input-group input-group-outline">
+                <label class="form-label"></label>
+                <input type="text" class="form-control" name="day7dst2" value="{{ daydst2 }}">
+              </div>
+            </div>
+          </div>
+          <hr>
+          <div class="text-center">
+            <button type="submit" class="btn bg-gradient-primary w-lg-25"><i class="fa fa-check-circle"></i>
+              Save User</button>
+            <a href="{{ route('work_schedules.index') }}" class="btn btn-warning w-lg-25"><i
+                class="fa fa-times-circle"></i> Cancel Record</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+@end
+
+@pushOnceTo('breadcrumb')
+<li class="breadcrumb-item text-sm text-dark active"><a class="font-weight-bolder text-dark"
+    href="{{ route('work_schedules.create') }}">Create Work Schedule</a></li>
+@end

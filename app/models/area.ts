@@ -1,11 +1,19 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
+import { BaseModel, column, hasMany, beforeCreate } from '@adonisjs/lucid/orm'
 import User from './user.js'
 import type { HasMany } from '@adonisjs/lucid/types/relations'
+import { v4 as uuidv4 } from "uuid";
 
 export default class Area extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
+
+  @beforeCreate()
+  public static assignUuid(area: Area) {
+    area.uuid = uuidv4();
+  }
+  @column()
+  declare uuid: string
 
   @column()
   declare state: number

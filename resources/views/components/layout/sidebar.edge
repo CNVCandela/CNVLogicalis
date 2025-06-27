@@ -15,24 +15,43 @@
       <span class="nav-link-text ms-1"> Users</span>
     </a>
   </li>
+  {{--
   <li class="nav-item">
-      <a data-bs-toggle="collapse" href="#tables" class="nav-link text-white {{ menu02 || '' }}"
-          aria-controls="tables" role="button" aria-expanded="false">
-          <div class="text-center text-white me-2 d-flex align-items-center justify-content-center">
-              <i class="opacity-10 material-icons">table_view</i>
-          </div>
-          <span class="nav-link-text ms-1">Tables Systems</span>
-      </a>
-      <div class="collapse" id="tables">
-          <ul class="nav">
-              <li class="nav-item">
-                  <a class="nav-link text-white" href="{{ route('sysadmin.areas.index') }}">
-                      <small class="sidenav-mini-icon"> <i class="fa fa-angle-right"></i></small>
-                      <span class="sidenav-normal  ms-1  ps-1"> Areas </span>
-                  </a>
-              </li>
-          </ul>
+    <a data-bs-toggle="collapse" href="#tables" class="nav-link text-white {{ menu02 || '' }}" aria-controls="tables"
+      role="button" aria-expanded="false">
+      <div class="text-center text-white me-2 d-flex align-items-center justify-content-center">
+        <i class="opacity-10 material-icons">table_view</i>
       </div>
+      <span class="nav-link-text ms-1">Tables Systems</span>
+    </a>
+    <div class="collapse" id="tables">
+      <ul class="nav">
+        <li class="nav-item">
+          <a class="nav-link text-white" href="{{ route('sysadmin.areas.index') }}">
+            <small class="sidenav-mini-icon"> <i class="fa fa-angle-right"></i></small>
+            <span class="sidenav-normal  ms-1  ps-1"> Areas </span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </li>
+  --}}
+  <li class="nav-item">
+    <a class="nav-link text-white {{ menu03 || '' }} " href=" {{ route('holidays.index') }}">
+      <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+        <i class="material-icons opacity-10">checklist_rtl</i>
+      </div>
+      <span class="nav-link-text ms-1"> holidays</span>
+    </a>
+  </li>
+
+  <li class="nav-item">
+    <a class="nav-link text-white {{ menu04 || '' }} " href=" {{ route('work_schedules.index') }}">
+      <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+        <i class="material-icons opacity-10">checklist_rtl</i>
+      </div>
+      <span class="nav-link-text ms-1"> Work Schedules</span>
+    </a>
   </li>
 
   <li class="nav-item">

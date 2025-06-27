@@ -1,0 +1,188 @@
+@pushOnceTo('breadcrumb')
+<li class="breadcrumb-item text-sm text-dark active"><a class="font-weight-bolder text-dark"
+    href="{{ route('work_schedules.index') }}">Module Work Schedules</a></li>
+@end
+@layout({ title: 'Module Work Schedules', menu04: 'active bg-gradient-primary' })
+<div class="row justify-content-center">
+  <div class="col-12">
+    <div class="card my-4">
+      <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+        <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+          <h6 class="text-white text-capitalize ps-3">List Work Schedules</h6>
+        </div>
+        <div class="row mt-2" id="div-alert">
+          <div class="col-12">
+            @flashMessage('notification')
+            <div class="notification {{ $message.type }}">
+              <button type="button" class="btn-close text-lg py-3 opacity-10" data-bs-dismiss="alert"
+                aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              @each(message in $message.message)
+              <li>{{ message }}</li>
+              @end
+            </div>
+            @end
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-6">
+              <form role="form" action="{{ route('work_schedules.search') }}" method="POST">
+                {{ csrfField() }}
+                <div class="input-group input-group-outline">
+                  <label class="form-label"></label>
+                  <input type="text" name="search" class="form-control" placeholder="Search" value="{{ searchTerm}}">
+                  <button class="btn btn-warning my-2 my-sm-0" type="submit"><i class="fa fa-search"></i></button>
+                  @if(searchState)
+                  <a href="{{ route('work_schedules.index') }}" class="btn btn-success my-2 my-sm-0"><i
+                      class="fa fa-times-circle"></i> Return</a>
+                  @end
+                </div>
+              </form>
+            </div>
+            <div class="col-3"></div>
+            <div class="col-3">
+              <a class="btn btn-info w-lg-100" href="{{ route('work_schedules.create') }}"><i
+                  class="fa fa-plus-square mr-2"></i> Create Work Schedule</a>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <div class="table-responsive p-0">
+                <table class="table table-sm align-items-center">
+                  <thead>
+                    <tr>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                        Name</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                        N° CFD 3CX</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                        Option</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                        Module</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                        No Time Condition</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                        MON
+                      </th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                        TUE
+                      </th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                        WED
+                      </th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                        THU
+                      </th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                        FRI
+                      </th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                        SAT
+                      </th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                        SUN
+                      </th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @each(row in records)
+                    <tr>
+                      <td class="text-center" width="10%">{{ row.name }}</td>
+                      <td class="text-center" width="5%">{{ row.cfd_3cx }}</td>
+                      <td class="text-center" width="5%">{{ row.module }}</td>
+                      <td class="text-center">
+                        @if (row.cfd == 1)
+                        Escalomiento
+                        @else
+                        Plantones
+                        @endif
+                      </td>
+                      <td class="text-center">{{ row.dst01 }}</td>
+                      <td class="text-center">
+                        @if (row.day01)
+                        <i class="fa fa-check text-info"></i>
+                        @else
+                        <i class="fa fa-times text-danger"></i>
+                        @endif
+                      </td>
+                      <td class="text-center">
+                        @if (row.day02)
+                        <i class="fa fa-check text-info"></i>
+                        @else
+                        <i class="fa fa-times text-danger"></i>
+                        @endif
+                      </td>
+                      <td class="text-center">
+                        @if (row.day03)
+                        <i class="fa fa-check text-info"></i>
+                        @else
+                        <i class="fa fa-times text-danger"></i>
+                        @endif
+                      </td>
+                      <td class="text-center">
+                        @if (row.day04)
+                        <i class="fa fa-check text-info"></i>
+                        @else
+                        <i class="fa fa-times text-danger"></i>
+                        @endif
+                      </td>
+                      <td class="text-center">
+                        @if (row.day05)
+                        <i class="fa fa-check text-info"></i>
+                        @else
+                        <i class="fa fa-times text-danger"></i>
+                        @endif
+                      </td>
+                      <td class="text-center">
+                        @if (row.day06)
+                        <i class="fa fa-check text-info"></i>
+                        @else
+                        <i class="fa fa-times text-danger"></i>
+                        @endif
+                      </td>
+                      <td class="text-center">
+                        @if (row.day07)
+                        <i class="fa fa-check text-info"></i>
+                        @else
+                        <i class="fa fa-times text-danger"></i>
+                        @endif
+                      </td>
+                      <td width="10%" class="align-middle">
+                        <div class="btn-group">
+                          <a class="btn-sm btn-info" href="{{ route('work_schedules.edit', { id: row.uuid }) }}"><i
+                              class="fa fa-pencil"></i> Edit</a>
+                          <a class="btn-sm btn-danger" href="{{ route('work_schedules.state', { id: row.uuid }) }}"><i
+                              class="fa fa-trash"></i> Delete</a>
+                        </div>
+                      </td>
+                    </tr>
+                    @endeach
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <nav class="mt-3" aria-label="Page navigation example">
+              <ul class="pagination justify-content-center pagination-primary">
+                <!-- Números de página -->
+                @each(anchor in records.getUrlsForRange(1, records.lastPage))
+                <li class="page-item {{ anchor.page === records.currentPage ? 'active' : '' }}">
+                  <a class="page-link" href="{{ anchor.url }}">{{ anchor.page }}</a>
+                </li>
+                @endeach
+
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  @end

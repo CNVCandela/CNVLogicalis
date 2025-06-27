@@ -1,11 +1,12 @@
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
 import User from '#models/user'
+import { faker } from '@faker-js/faker'
 
 export default class UserSeeder extends BaseSeeder {
   async run() {
     await User.create(
       {
-        uuid: '0000001',
+        uuid: faker.string.uuid(),
         state: 1,
         type: 1,
         situation: 1,

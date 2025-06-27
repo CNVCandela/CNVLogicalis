@@ -8,14 +8,17 @@ import vine from '@vinejs/vine'
 export default class UsersController {
   async index({ request, view }: HttpContext) {
     try {
+      const searchTerm = ''
+      const searchState = false
       const page = request.input('page', 1)
       const limit = 20
       //const records = await db.from('users').select('*');
       const records = await User.query().preload('area').preload('role').orderBy('fullName', 'asc').paginate(page, limit);
       records.baseUrl('/sysadmin/users')
-      console.log('Lista de Usuarios');
       return view.render('sysadmin/sysusers/index', {
-        records: records
+        records: records,
+        searchTerm: searchTerm,
+        searchState: searchState
       });
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -28,37 +31,40 @@ export default class UsersController {
 
   async search({ request, view }: HttpContext) {
     try {
+      const searchState = true
       const searchTerm = request.input('search')
       const page = request.input('page', 1)
       const limit = 20
-  
+
       const query = User.query()
         .preload('area')
         .preload('role')
         .orderBy('fullName', 'asc')
-  
+
       if (searchTerm) {
         query.where((q) => {
           q.where('fullName', 'ILIKE', `%${searchTerm}%`)
-           .orWhere('email', 'ILIKE', `%${searchTerm}%`)
+            .orWhere('email', 'ILIKE', `%${searchTerm}%`)
         })
       }
-  
+
       const records = await query.paginate(page, limit)
       records.baseUrl('/sysadmin/users')
-  
-      return view.render('sysadmin/sysusers/index', { records })
+
+      return view.render('sysadmin/sysusers/index', {
+        records: records,
+        searchTerm: searchTerm,
+        searchState: searchState
+      })
     } catch (error) {
       console.error(error)
-      return view.render('sysadmin/sysusers/index', { 
+      return view.render('sysadmin/sysusers/index', {
         records: [],
         error: 'Error en la búsqueda'
       })
     }
   }
-  /**
-   * Display form to create a new record
-   */
+
   async create({ view }: HttpContext) {
     try {
       const roles = await Role.query().orderBy('name', 'asc');
@@ -77,9 +83,6 @@ export default class UsersController {
     }
   }
 
-  /**
-   * Handle form submission for the create action
-   */
   async store({ request, response, session }: HttpContext) {
     const username = request.input('form_name');
     const email = request.input('form_email');
@@ -181,7 +184,7 @@ export default class UsersController {
    */
   async show({ params, view, response }: HttpContext) {
     const user = await User.find(params.id);
-    console.log('Show User ID: '+ user?.id + ' User Name: ' + user?.fullName + ' User Email: ' + user?.email);
+    console.log('Show User ID: ' + user?.id + ' User Name: ' + user?.fullName + ' User Email: ' + user?.email);
     if (user) {
       const roles = await Role.query().orderBy('name', 'asc');
       const areas = await Area.query().orderBy('name', 'asc');
@@ -196,17 +199,40 @@ export default class UsersController {
 
   }
 
-  async state({ params, view, response }: HttpContext) {
-    const user = await User.find(params.id);
-    console.log('Show User ID: '+ user?.id + ' User Name: ' + user?.fullName + ' User Email: ' + user?.email);
-    if (user) {
-      const roles = await Role.query().orderBy('name', 'asc');
-      const areas = await Area.query().orderBy('name', 'asc');
-      return view.render('sysadmin/sysusers/edit', {
-        record: user,
-        roles: roles,
-        areas: areas
-      });
+  async state({ params, response, session }: HttpContext) {
+    console.log('Change Status User ID: ' + params.id);
+    const record = await User.findBy('uuid', params.id);
+    const currentDate = new Date().toISOString().split('T')[0];
+
+    console.log('Change Status Record ID: ' + record?.id + ' record Name: ' + record?.name + ' record UuID: ' + record?.uuid);
+    if (record) {
+      if (record.state === 1) {
+        record.state = 5
+        record.situation = 5
+        record.password = 'D1s4bl3dUs3r' + currentDate
+        record.recover = 'D1s4bl3dUs3r' + currentDate
+
+        session.flash('notification', {
+          type: 'alert alert-info alert-dismissible text-white fade show',
+          message: ['The user [' + record.fullName + '] was deactivated.'],
+        })
+
+      } else {
+        record.state = 1
+        record.situation = 1
+        record.password = 'N3wP4ssw0rd' + currentDate
+        record.recover = 'N3wP4ssw0rd' + currentDate
+
+        session.flash('notification', {
+          type: 'alert alert-success alert-dismissible text-white fade show',
+          message: ['The User [' + record.fullName + '] is activated, the new password is: ' + 'N3wP4ssw0rd' + currentDate],
+        })
+
+      }
+      await record.save()
+
+      return response.redirect().toRoute('sysadmin.users.index');
+
     } else {
       return response.redirect().toRoute('sysadmin.users.index');
     }
@@ -216,12 +242,19 @@ export default class UsersController {
    * Edit individual record
    */
   async edit({ params, view, response }: HttpContext) {
-    console.log(params);
-    const user = await User.find(params.id);
-    if (!user) {
-      return response.status(404).json({ message: "User not found" });
+    const user = await User.findBy('uuid', params.id);
+    console.log('Edit User ID: ' + user?.id + ' User Name: ' + user?.fullName + ' User Email: ' + user?.email);
+    if (user) {
+      const roles = await Role.query().orderBy('name', 'asc');
+      const areas = await Area.query().orderBy('name', 'asc');
+      return view.render('sysadmin/sysusers/edit', {
+        record: user,
+        roles: roles,
+        areas: areas
+      });
+    } else {
+      return response.redirect().toRoute('sysadmin.users.index');
     }
-    return response.json(user);
   }
 
   /**
@@ -260,7 +293,7 @@ export default class UsersController {
           username,
           password,
           roles,
-          areas,  
+          areas,
         },
         messages,
       });
@@ -286,7 +319,7 @@ export default class UsersController {
     await user.save()
 
     return response.redirect().toRoute('sysadmin.users.index');
-   }
+  }
 
   /**
    * Delete record

@@ -10,20 +10,25 @@
         <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
           <h6 class="text-white text-capitalize ps-3">List Users</h6>
         </div>
-        <div class="row mt-2" id="div-alert">
-          <div class="col-12">
-            @flashMessage('notification')
-            <div class="notification {{ $message.type }}">
-              <button type="button" class="btn-close text-lg py-3 opacity-10" data-bs-dismiss="alert"
-                aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-              @each(message in $message.message)
-              <li>{{ message }}</li>
-              @end
-            </div>
+        <div class="row mt-2">
+
+          @flashMessage('validationError')
+          <div class="notification {{ $message.type }}">
+            <li> <b>Error:</b> {{ $message.message }}</li>
+          </div>
+          @end
+
+          @flashMessage('notification')
+          <div class="notification {{ $message.type }}">
+            <span class="text-sm">Revisar el Error.</span>
+            <button type="button" class="btn-close text-lg py-3 opacity-10" data-bs-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            @each(message in $message.message)
+            <li>{{ message }}</li>
             @end
           </div>
+          @end
         </div>
       </div>
       <div class="card-body">
@@ -31,15 +36,11 @@
           <div class="col-6">
             <form role="form" action="{{ route('sysadmin.users.search') }}" method="POST">
               {{ csrfField() }}
-              <div class="input-group input-group-outline">
-                <label class="form-label"></label>
-                <input type="text" name="search" class="form-control" placeholder="Search" value="{{ searchTerm}}">
-                <button class="btn btn-warning my-2 my-sm-0" type="submit"><i class="fa fa-search"></i></button>
-                @if(searchState)
-                <a href="{{ route('sysadmin.users.index') }}" class="btn btn-success my-2 my-sm-0"><i
-                    class="fa fa-times-circle"></i> Return</a>
-                @end
-              </div>
+                <div class="input-group input-group-outline">
+                  <label class="form-label"></label>
+                  <input type="text" name="search" class="form-control" placeholder="Search">
+                  <button class="btn btn-success my-2 my-sm-0" type="submit"><i class="fa fa-search"></i></button>
+                </div>
             </form>
           </div>
           <div class="col-4"></div>
@@ -65,8 +66,6 @@
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                       Role</th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                      State</th>
-                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                       Options
                     </th>
                   </tr>
@@ -74,25 +73,17 @@
                 <tbody>
                   @each(row in records)
                   <tr>
-                    <td width="10%">{{ row.id }}</td>
-                    <td width="30%">{{ row.fullName }}</td>
-                    <td width="30%">{{ row.email }}</td>
-                    <td width="10%">{{ row.area ? row.area.name : '-' }}</td>
-                    <td width="10%">{{ row.role ? row.role.name : '-' }}</td>
-                    <td width="10%" class="align-middle text-center">
-                      <span class="badge badge-sm bg-gradient-{{ row.state == '1' ? 'success' : 'danger' }}">
-                        {{ row.state == '1' ? 'Active' : 'Inactive' }}</span>
-                      </span>
-                    <td width="10%" class="align-middle text-center">
+                    <td  width="10%">{{ row.id }}</td>
+                    <td  width="30%">{{ row.fullName }}</td>
+                    <td  width="30%">{{ row.email }}</td>
+                    <td  width="10%">{{ row.area ? row.area.name : '-' }}</td>
+                    <td  width="10%">{{ row.role ? row.role.name : '-' }}</td>
+                    <td width="10%" class="align-middle">
                       <div class="btn-group">
-                        @if(row.state == '1')
-                        <a class="btn-sm btn-info" href="{{ route('sysadmin.users.edit', { id: row.uuid }) }}"><i
+                        <a class="btn-sm btn-info" href="{{ route('sysadmin.users.show', { id: row.id }) }}"><i
                             class="fa fa-pencil"></i> Edit</a>
-                        @end
-                        <a class="btn-sm btn-{{ row.state == '1' ? 'danger' : 'success' }}"
-                          href="{{ route('sysadmin.users.state', { id: row.uuid }) }}"><i
-                            class="fa fa-{{ row.state == '1' ? 'trash' : 'check' }}"></i> {{
-                          row.state == '1' ? 'Deactivate' : 'Activate' }}</a>
+                        <a class="btn-sm btn-danger" href="{{ route('sysadmin.users.state', { id: row.id }) }}"><i
+                            class="fa fa-trash"></i> Delete</a> 
                       </div>
                     </td>
                   </tr>

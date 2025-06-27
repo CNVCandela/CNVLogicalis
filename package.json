@@ -62,7 +62,8 @@
     "edge.js": "^6.2.1",
     "luxon": "^3.6.1",
     "pg": "^8.16.0",
-    "reflect-metadata": "^0.2.2"
+    "reflect-metadata": "^0.2.2",
+    "uuid": "^11.1.0"
   },
   "hotHook": {
     "boundaries": [
