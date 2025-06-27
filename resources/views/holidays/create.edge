@@ -1,109 +1,68 @@
-@layout({ title: 'Create User', menu01: 'active bg-gradient-primary' })
+@layout({ title: 'Create User', menu03: 'active bg-gradient-primary' })
 
 <div class="row justify-content-center">
   <div class="col-8">
     <div class="card my-4">
       <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
         <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-          <h6 class="text-white text-capitalize ps-3">Module Users / Create</h6>
+          <h6 class="text-white text-capitalize ps-3">Module Holiday / Create</h6>
         </div>
         <div class="row mt-2">
-
-          @flashMessage('validationError')
-          <div class="notification {{ $message.type }}">
-            <li> <b>Error:</b> {{ $message.message }}</li>
-          </div>
-          @end
-
-          @flashMessage('notification')
-          <div class="notification {{ $message.type }}">
-            <span class="text-sm">Revisar el Error.</span>
-            <button type="button" class="btn-close text-lg py-3 opacity-10" data-bs-dismiss="alert" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-            @each(message in $message.message)
-            <li>{{ message }}</li>
+          <div class="col-12">
+            @flashMessage('notification')
+            <div class="alert alert-danger alert-dismissible text-white" role="alert">
+              <span class="text-sm">Check Error Please:</span>
+              <button type="button" class="btn-close text-lg py-3 opacity-10" data-bs-dismiss="alert"
+                aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              @each(message in $message.message)
+              <li>{{ message }}</li>
+              @end
+            </div>
             @end
-          </div>
-          @end
 
-          <div class="col-6">
-          </div>
-          <div class="col-2"></div>
-          <div class="col-4">
           </div>
         </div>
       </div>
       <div class="card-body">
-        @flashMessage('validationError')
-        <div class="notification {{ $message.type }}">
-          <li> <b>Error:</b> {{ $message.message }}</li>
-        </div>
-        @end
-        <form role="form" action="{{ route('sysadmin.users.store') }}" method="POST">
+        <form role="form" action="{{ route('holidays.store') }}" method="POST">
           {{ csrfField() }}
           <div class="row">
             <div class="col-12">
               <div class="input-group input-group-static">
-                <label>Full Name</label>
-                <input name="form_name" type="text" class="form-control" onfocus="focused(this)"
-                  onfocusout="defocused(this)" value="{{ flashMessages.get('old.username', '') }}">
+                <label>Holiday Name</label>
+                <input name="name" type="text" class="form-control" value="{{ flashMessages.get('old.name', name) }}">
               </div>
             </div>
           </div>
+
           <div class="row">
-            <div class="col-12">
-              <div class="input-group input-group-static">
-                <label>Email</label>
-                <input name="form_email" type="text" class="form-control" onfocus="focused(this)"
-                  onfocusout="defocused(this)" value="{{ flashMessages.get('old.email', '') }}">
+            <div class="col-4">
+              <div class="my-3 input-group input-group-static">
+                <label>Date</label>
+                <input name="date" type="date" class="form-control" value="{{ flashMessages.get('old.date', date) }}">
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="my-3 input-group input-group-static">
+                <label>Time Start</label>
+                <input name="init" type="time" class="form-control" value="{{ flashMessages.get('old.init', init) }}">
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="my-3 input-group input-group-static">
+                <label>Time End</label>
+                <input name="due" type="time" class="form-control" value="{{ flashMessages.get('old.due', due) }}">
               </div>
             </div>
           </div>
-          <div class="row">
-            <div class="col-12">
-              <div class="input-group input-group-static">
-                <label>Password</label>
-                <input name="form_password" type="text" class="form-control" onfocus="focused(this)"
-                  onfocusout="defocused(this)" value="{{ flashMessages.get('old.password', '') }}" </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-6">
-                <div class="my-3 input-group input-group-static">
-                  <div class="input-group input-group-static">
-                    <label class="mb-2" for="form_role">Roles</label>
-                    <select class="form-control select2" name="form_role">
-                      <option value="0">Select Role</option>
-                      @each(reg in roles)
-                      <option value="{{ reg.id }}" {{ flashMessages.get('old.roles')==reg.id ? 'selected' : '' }}>
-                        {{ reg.name }}
-                      </option>
-                      @end
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="my-3 input-group input-group-static">
-                  <label class="mb-2" for="form_area" class="ms-0">Areas</label>
-                  <select class="form-control select2" name="form_area">
-                    <option value="0">Select Area</option>
-                    @each(reg in areas)
-                    <option value="{{ reg.id }}" {{ flashMessages.get('old.areas')==reg.id ? 'selected' : '' }}>
-                      {{ reg.name }}
-                    </option>
-                    @end
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="text-center">
-              <button type="submit" class="btn bg-gradient-primary w-lg-25"><i class="fa fa-check-circle"></i>
-                Save User</button>
-              <a href="{{ route('sysadmin.users.index') }}" class="btn btn-warning w-lg-25"><i
-                  class="fa fa-times-circle"></i> Cancel Record</a>
-            </div>
+          <div class="text-center">
+            <button type="submit" class="btn bg-gradient-primary w-lg-25"><i class="fa fa-check-circle"></i>
+              Save Holiday</button>
+            <a href="{{ route('holidays.index') }}" class="btn btn-warning w-lg-25"><i class="fa fa-times-circle"></i>
+              Cancel Record</a>
+          </div>
         </form>
       </div>
     </div>
@@ -114,5 +73,5 @@
 
 @pushOnceTo('breadcrumb')
 <li class="breadcrumb-item text-sm text-dark active"><a class="font-weight-bolder text-dark"
-    href="{{ route('sysadmin.users.create') }}">Create New User</a></li>
+    href="{{ route('holidays.create') }}">Create New Holiday</a></li>
 @end

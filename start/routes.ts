@@ -53,8 +53,9 @@ router.group(() => {
 
   router.group(() => {
     router.post('holidays/search', [HolidaysController, 'search']).as('holidays.search');
-    router.post('holidays/:id/state', [HolidaysController, 'state']).as('holidays.state');
-    router.resource('holidays', HolidaysController).only(['index', 'create', 'store', 'show', 'edit', 'update'])
+    router.get('holidays/:id/state', [HolidaysController, 'state']).as('holidays.state');
+    router.post('holidays/:id', [HolidaysController, 'update']).as('holidays.update');
+    router.resource('holidays', HolidaysController).only(['index', 'create', 'store', 'show', 'edit'])
 
     router.post('work_schedules/search', [WorkSchedulesController, 'search']).as('work_schedules.search');
     router.get('work_schedules/:id/state', [WorkSchedulesController, 'state']).as('work_schedules.state');

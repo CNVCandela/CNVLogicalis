@@ -165,7 +165,7 @@ export default class WorkSchedulesController {
 
       session.flash('notification', {
         type: 'alert alert-success alert-dismissible text-white fade show',
-        message: ['Registro guardado correctamente.'],
+        message: ['Record saved successfully.'],
       })
       return response.redirect().toRoute('work_schedules.index');
 
@@ -197,7 +197,6 @@ export default class WorkSchedulesController {
 
   async edit({ params, view, response }: HttpContext) {
     const record = await WorkSchedule.findBy('uuid', params.id);
-    console.log('Edit Work Schedule ID: ' + record);
     console.log('Show Record ID: ' + record?.id + ' record Name: ' + record?.name + ' record UuID: ' + record?.uuid);
     if (record) {
       return view.render('workschedules/edit', {
@@ -364,7 +363,7 @@ export default class WorkSchedulesController {
 
       session.flash('notification', {
         type: 'alert alert-success alert-dismissible text-white fade show',
-        message: ['Registro guardado correctamente.'],
+        message: ['Record saved successfully.'],
       })
       return response.redirect().toRoute('work_schedules.index');
 

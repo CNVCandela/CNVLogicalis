@@ -17,13 +17,16 @@ export default class Holiday extends BaseModel {
   }
 
   @column()
+  declare estado: number
+
+  @column()
+  declare tipo: number
+
+  @column()
+  declare situacion: number
+
+  @column()
   declare state: number
-
-  @column()
-  declare type: number
-
-  @column()
-  declare situation: number
 
   @column()
   declare userId: number
@@ -31,14 +34,14 @@ export default class Holiday extends BaseModel {
   @column()
   declare name: string | null
 
-  @column.date()
+  @column.date({ columnName: 'date_issue' })
   declare dateIssue: DateTime | null
 
-  @column.date()
-  declare dateStart: DateTime | null
+  @column({ columnName: 'date_start' })
+  declare dateStart: string | null
 
-  @column.date()
-  declare dateEnd: DateTime | null
+  @column({ columnName: 'date_end' })
+  declare dateEnd: string | null
 
   @column()
   declare queue01: string | null

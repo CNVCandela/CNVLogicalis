@@ -53,37 +53,16 @@
                 <table class="table table-sm align-items-center">
                   <thead>
                     <tr>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                        Holiday</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                        Name</th>
+                        Date</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                        N° CFD 3CX</th>
+                        Time Start</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                        Option</th>
+                        Time End</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                        Module</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                        No Time Condition</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                        MON
-                      </th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                        TUE
-                      </th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                        WED
-                      </th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                        THU
-                      </th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                        FRI
-                      </th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                        SAT
-                      </th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                        SUN
-                      </th>
+                        Status</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
 
                       </th>
@@ -92,73 +71,24 @@
                   <tbody>
                     @each(row in records)
                     <tr>
-                      <td class="text-center" width="10%">{{ row.name }}</td>
-                      <td class="text-center" width="5%">{{ row.cfd_3cx }}</td>
-                      <td class="text-center" width="5%">{{ row.module }}</td>
-                      <td class="text-center">
-                        @if (row.cfd == 1)
-                        Escalomiento
-                        @else
-                        Plantones
-                        @endif
+                      <td width="40%">{{ row.name }}</td>
+                      <td class="text-center" width="15%">{{ row.dateIssue?.toFormat('yyyy-LL-dd') ?? '' }}</td>
+                      <td class="text-center" width="15%">{{ row.dateStart }}</td>
+                      <td class="text-center" width="15%">{{ row.dateEnd }}</td>
+                      <td class="text-center" width="20%">
+                        <span class="badge badge-sm bg-gradient-{{ row.state == '1' ? 'success' : 'danger' }}">
+                          {{ row.state == '1' ? 'Active' : 'Inactive' }}</span>
+                        </span>
                       </td>
-                      <td class="text-center">{{ row.dst01 }}</td>
-                      <td class="text-center">
-                        @if (row.day01)
-                        <i class="fa fa-check text-info"></i>
-                        @else
-                        <i class="fa fa-times text-danger"></i>
-                        @endif
-                      </td>
-                      <td class="text-center">
-                        @if (row.day02)
-                        <i class="fa fa-check text-info"></i>
-                        @else
-                        <i class="fa fa-times text-danger"></i>
-                        @endif
-                      </td>
-                      <td class="text-center">
-                        @if (row.day03)
-                        <i class="fa fa-check text-info"></i>
-                        @else
-                        <i class="fa fa-times text-danger"></i>
-                        @endif
-                      </td>
-                      <td class="text-center">
-                        @if (row.day04)
-                        <i class="fa fa-check text-info"></i>
-                        @else
-                        <i class="fa fa-times text-danger"></i>
-                        @endif
-                      </td>
-                      <td class="text-center">
-                        @if (row.day05)
-                        <i class="fa fa-check text-info"></i>
-                        @else
-                        <i class="fa fa-times text-danger"></i>
-                        @endif
-                      </td>
-                      <td class="text-center">
-                        @if (row.day06)
-                        <i class="fa fa-check text-info"></i>
-                        @else
-                        <i class="fa fa-times text-danger"></i>
-                        @endif
-                      </td>
-                      <td class="text-center">
-                        @if (row.day07)
-                        <i class="fa fa-check text-info"></i>
-                        @else
-                        <i class="fa fa-times text-danger"></i>
-                        @endif
-                      </td>
-                      <td width="10%" class="align-middle">
-                        <div class="btn-group">
-                          <a class="btn-sm btn-info" href="{{ route('holidays.edit', { id: row.uuid }) }}"><i
-                              class="fa fa-pencil"></i> Edit</a>
-                          <a class="btn-sm btn-danger" href="{{ route('holidays.state', { id: row.uuid }) }}"><i
-                              class="fa fa-trash"></i> Delete</a>
-                        </div>
+                      <td class="align-middle" width="10%">
+                        @if(row.state == '1')
+                        <a class="btn-sm btn-info" href="{{ route('holidays.edit', { id: row.uuid }) }}"><i
+                            class="fa fa-pencil"></i> Edit</a>
+                        @end
+                        <a class="btn-sm btn-{{ row.state == '1' ? 'danger' : 'success' }}"
+                          href="{{ route('holidays.state', { id: row.uuid }) }}"><i
+                            class="fa fa-{{ row.state == '1' ? 'trash' : 'check' }}"></i> {{
+                          row.state == '1' ? 'Delete' : 'Activate' }}</a>
                       </td>
                     </tr>
                     @endeach
