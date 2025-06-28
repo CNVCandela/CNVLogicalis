@@ -4,7 +4,7 @@ import vine from '@vinejs/vine'
 
 export default class WorkSchedulesController {
 
-  async index({ request, view }: HttpContext) {
+  async connections({ request, view }: HttpContext) {
     const searchTerm = ''
     const searchState = false
     try {

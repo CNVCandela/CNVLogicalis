@@ -19,6 +19,7 @@ import SysRolesController from '#controllers/sysadmin/roles_controller'
 import ApiController from '#controllers/ApiRest/api_controller'
 import HolidaysController from '#controllers/holidays_controller'
 import WorkSchedulesController from '#controllers/work_schedules_controller'
+import QueriesController from '#controllers/reports/queries_controller'
 
 router.get('/', async (ctx) => {
   await ctx.auth.check()
@@ -62,6 +63,10 @@ router.group(() => {
     router.post('work_schedules/:id', [WorkSchedulesController, 'update']).as('work_schedules.update');
     router.resource('work_schedules', WorkSchedulesController).only(['index', 'create', 'store', 'show', 'edit'])
   })
+
+  router.group(() => {
+    router.get('connections', [QueriesController, 'connections']).as('connections');
+  }).prefix('report').as('reports')
 
 }).use(middleware.auth())
 

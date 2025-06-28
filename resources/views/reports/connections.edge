@@ -1,0 +1,116 @@
+@pushOnceTo('breadcrumb')
+<li class="breadcrumb-item text-sm text-dark active"><a class="font-weight-bolder text-dark"
+    href="{{ route('reports.connections') }}">Report of Connections</a></li>
+@end
+@layout({ title: 'Report of Connections', menu05: 'active bg-gradient-primary' })
+<div class="row justify-content-center">
+  <div class="col-12">
+    <div class="card my-4">
+      <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+        <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+          <h6 class="text-white text-capitalize ps-3">Report of Connections</h6>
+        </div>
+        <div class="row mt-2" id="div-alert">
+          <div class="col-12">
+            @flashMessage('notification')
+            <div class="notification {{ $message.type }}">
+              <button type="button" class="btn-close text-lg py-3 opacity-10" data-bs-dismiss="alert"
+                aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              @each(message in $message.message)
+              <li>{{ message }}</li>
+              @end
+            </div>
+            @end
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-12">
+              <div class="table-responsive p-0">
+                <table class="table table-sm align-items-center">
+                  <thead>
+                    <tr>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">API</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">CFD
+                      </th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Module
+                      </th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Creation</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Day
+                      </th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Hour
+                      </th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ANI
+                      </th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">DNIS
+                      </th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Source
+                      </th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                        Destination</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status
+                      </th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                        Message</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @each(row in records)
+                    <tr>
+                      <td>
+                        @if (row.apirest == 1)
+                        <span class="badge bg-primary">WS</span>
+                        @else
+                        <span class="badge bg-info">HL</span>
+                        @endif
+                      </td>
+                      <td class="text-center">{{ row.cfd ?? '' }}</td>
+                      <td class="text-center">{{ row.module ?? '' }}</td>
+                      <td class="">{{ row.created_at }}</td>
+                      <td class="text-center">{{ row.day }}</td>
+                      <td class="text-center">{{ row.hour }}</td>
+                      <td class="text-center">{{ row.ani }}</td>
+                      <td class="text-center">{{ row.dnis }}</td>
+                      <td class="text-center">{{ row.extensionfrom }}</td>
+                      <td class="text-center">{{ row.extensionto }}</td>
+                      <td class="text-center">
+                        @if (row.status == 1)
+                        <span class="badge bg-success">Validation True</span>
+                        @else
+                        <span class="badge bg-danger">Validation False</span>
+                        @endif
+                      </td>
+                      <td class="text-center">{{ row.message }}</td>
+                    </tr>
+                    @endeach
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <nav class="mt-3" aria-label="Page navigation example">
+              <ul class="pagination justify-content-center pagination-primary">
+                <!-- Números de página -->
+                @if(records && records.lastPage > 0)
+                @each(anchor in records.getUrlsForRange(1, records.lastPage))
+                <li class="page-item {{ anchor.page === records.currentPage ? 'active' : '' }}">
+                  <a class="page-link" href="{{ anchor.url }}">{{ anchor.page }}</a>
+                </li>
+                @endeach
+                @else
+                <li class="page-item disabled">
+                  <span class="page-link">0</span>
+                </li>
+                @endif
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  @end
